@@ -1525,5 +1525,17 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage 最多添加 {0} 个资金叠：有数千个资金叠时，游戏每次付款都几乎卡死。",
 "This many stacks can make the game nearly freeze when it pays.": "资金叠这么多时，游戏付款时可能几乎卡死。",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "最多 ${0}。超过 ${1} 的部分会放进额外的资金叠，游戏可能不让你花：有玩家用这些钱无法完成电话付款。Save Garage 最多添加 {2} 个资金叠：有数千个资金叠时，游戏每次付款都几乎卡死。只有在你能接受这一点时才使用。",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "银行里的 ${1} 中，有 ${0} 位于额外的资金叠里，游戏可能不让你花。把银行余额设为 ${2} 或更少，所有钱都能花。资金叠这么多时，游戏付款时可能几乎卡死。"
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "银行里的 ${1} 中，有 ${0} 位于额外的资金叠里，游戏可能不让你花。把银行余额设为 ${2} 或更少，所有钱都能花。资金叠这么多时，游戏付款时可能几乎卡死。",
+"Health, stamina, melee and focus bars": "生命值、体力、近战和专注条",
+"Health bar": "生命值条",
+"Stamina bar": "体力条",
+"Melee bar": "近战条",
+"Focus bar": "专注条",
+"Max everything": "一切都调到最大",
+"The game keeps a capacity in four places, and all four are set together.": "游戏把每项上限保存在四个地方，四处会一起设置。",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} 是游戏写入的最高值；这些条与上方的等级和特殊计量条互不相关。",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5 已连接，但 IPv6 数据连接尚未到达电脑的 TCP {0} 端口。",
+"Use the same home network on both devices.": "两台设备请接入同一个家庭网络。",
+"Check for guest Wi-Fi or client isolation.": "请检查访客 Wi-Fi 和无线客户端隔离。",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "游戏把每项上限保存在四个地方，四处会一起设置。{0} 是游戏写入的最高值；这些条与上方的等级和特殊计量条互不相关。"
 }

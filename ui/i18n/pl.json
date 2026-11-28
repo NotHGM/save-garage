@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage dodaje najwyżej {0} stosów: przy tysiącach stosów gra niemal zawieszała się przy każdej płatności.",
 "This many stacks can make the game nearly freeze when it pays.": "Tyle stosów może sprawić, że gra niemal zawiesi się przy płaceniu.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "Do ${0}. Kwoty powyżej ${1} trafiają do dodatkowych stosów, których gra może nie pozwolić ci wydać: gracz nie mógł nimi zapłacić przez telefon. Save Garage dodaje najwyżej {2} stosów: przy tysiącach stosów gra niemal zawieszała się przy każdej płatności. Używaj tego tylko, jeśli ci to odpowiada.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Z ${1} w banku ${0} leży w dodatkowych stosach, których gra może nie pozwolić ci wydać. Ustawienie banku na ${2} lub mniej sprawia, że wszystko da się wydać. Tyle stosów może sprawić, że gra niemal zawiesi się przy płaceniu."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Z ${1} w banku ${0} leży w dodatkowych stosach, których gra może nie pozwolić ci wydać. Ustawienie banku na ${2} lub mniej sprawia, że wszystko da się wydać. Tyle stosów może sprawić, że gra niemal zawiesi się przy płaceniu.",
+"Health, stamina, melee and focus bars": "Paski zdrowia, wytrzymałości, walki wręcz i skupienia",
+"Health bar": "Pasek zdrowia",
+"Stamina bar": "Pasek wytrzymałości",
+"Melee bar": "Pasek walki wręcz",
+"Focus bar": "Pasek skupienia",
+"Max everything": "Absolutnie wszystko na maks.",
+"The game keeps a capacity in four places, and all four are set together.": "Gra zapisuje pojemność w czterech miejscach i wszystkie cztery są ustawiane razem.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} to najwyższa wartość, jaką zapisuje gra; paski są niezależne od poziomów powyżej i od wskaźnika specjalnego.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5 się połączyła, ale połączenie danych IPv6 nie dotarło do portu TCP {0}.",
+"Use the same home network on both devices.": "Używaj tej samej sieci domowej na obu urządzeniach.",
+"Check for guest Wi-Fi or client isolation.": "Sprawdź, czy nie działa sieć Wi-Fi dla gości lub izolacja klientów.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "W systemie Windows zobacz app/docs/transfer-network.md, aby naprawić zaporę dla sieci prywatnej.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "Gra zapisuje pojemność w czterech miejscach i wszystkie cztery są ustawiane razem. {0} to najwyższa wartość, jaką zapisuje gra; paski są niezależne od poziomów powyżej i od wskaźnika specjalnego.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "Używaj tej samej sieci domowej na obu urządzeniach. Sprawdź, czy nie działa sieć Wi-Fi dla gości lub izolacja klientów."
 }

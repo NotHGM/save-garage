@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage voegt hooguit {0} stapels toe: met duizenden ervan bevroor de game bijna bij elke betaling.",
 "This many stacks can make the game nearly freeze when it pays.": "Zoveel stapels kunnen de game bij het betalen bijna laten bevriezen.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "Tot ${0}. Bedragen boven ${1} gaan naar extra stapels die je in de game misschien niet kunt uitgeven: een speler kon er geen betaling via de telefoon mee doen. Save Garage voegt hooguit {2} stapels toe: met duizenden ervan bevroor de game bijna bij elke betaling. Gebruik dit alleen als je dat geen probleem vindt.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Van de ${1} op de bank zit ${0} in extra stapels die je in de game misschien niet kunt uitgeven. Als je de bank op ${2} of minder zet, blijft alles uitgeefbaar. Zoveel stapels kunnen de game bij het betalen bijna laten bevriezen."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Van de ${1} op de bank zit ${0} in extra stapels die je in de game misschien niet kunt uitgeven. Als je de bank op ${2} of minder zet, blijft alles uitgeefbaar. Zoveel stapels kunnen de game bij het betalen bijna laten bevriezen.",
+"Health, stamina, melee and focus bars": "Gezondheids-, uithoudings-, melee- en focusbalk",
+"Health bar": "Gezondheidsbalk",
+"Stamina bar": "Uithoudingsbalk",
+"Melee bar": "Meleebalk",
+"Focus bar": "Focusbalk",
+"Max everything": "Werkelijk alles op max.",
+"The game keeps a capacity in four places, and all four are set together.": "De game bewaart een capaciteit op vier plekken, en alle vier worden samen ingesteld.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} is de hoogste waarde die de game schrijft; de balken staan los van de niveaus hierboven en van de speciale meter.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "De PS5 heeft verbinding gemaakt, maar de IPv6-dataverbinding heeft TCP-poort {0} niet bereikt.",
+"Use the same home network on both devices.": "Gebruik op beide apparaten hetzelfde thuisnetwerk.",
+"Check for guest Wi-Fi or client isolation.": "Controleer op gast-wifi of clientisolatie.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Zie op Windows app/docs/transfer-network.md om de firewall voor privénetwerken te herstellen.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "De game bewaart een capaciteit op vier plekken, en alle vier worden samen ingesteld. {0} is de hoogste waarde die de game schrijft; de balken staan los van de niveaus hierboven en van de speciale meter.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "Gebruik op beide apparaten hetzelfde thuisnetwerk. Controleer op gast-wifi of clientisolatie."
 }

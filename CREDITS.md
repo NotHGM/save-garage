@@ -30,8 +30,11 @@ Modified from the projects above, November 2026:
   with the launchers adding missing packages (1.31.2, pull request #18), both also by HelloMoon-1.
 - Setting the strength, cardio and focus levels in both places the game keeps them (1.32.0), from ShujiJaeger's
   finding that the game reads them from ScriptCharacterPhysique (HelloMoon-1/save-garage issue #4).
-- The four capacity bars: writing both attribute copies and the stats' points and rank together, and checking on a PS5
-  that 100 stays after the game saves, from ShujiJaeger.
+- The four capacity bars (1.33.0, pull request #22): writing both attribute copies and the stats' points and rank
+  together, and checking on a PS5 that 100 stays after the game saves, from ShujiJaeger.
+- The send-back hint when the PS5 reconnects without opening the IPv6 data connection, the Windows firewall guide
+  (docs/transfer-network.md) and trying another link-local address on a retry (1.33.0, pull request #23), by
+  HelloMoon-1.
 
 ## Services and assets
 

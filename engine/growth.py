@@ -136,8 +136,12 @@ def apply(b, choice):
                 raise fl.FeatureError('growth_layout')
             old = c['value']
             label = '%s (%s)' % (LABEL[qual], NAMES[who])
-            if old != v:
-                edits.extend((span, v) for span in c['spans'])
+            # each copy that differs from the chosen value is written, so a value the first slot already holds still
+            # brings a mirror or stats copy that disagrees in line with it
+            for span, now in zip(c['spans'], (c['value'], c['mirror'])):
+                if now != v:
+                    edits.append((span, v))
+            if any(x != v for x in (c['value'], c['mirror'], c['points'], c['rank'])):
                 log.append({'what': 'world', 'label': label, 'from': old, 'to': v})
             st.set('points', qual, v, label, owner=OWNER[who])
             st.set('rank', qual, v, label, owner=OWNER[who])

@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "O Save Garage adiciona no máximo {0} pilhas: com milhares delas, o jogo quase travava a cada pagamento.",
 "This many stacks can make the game nearly freeze when it pays.": "Tantas pilhas podem fazer o jogo quase travar na hora de pagar.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "Até ${0}. Valores acima de ${1} vão para pilhas extras que o jogo talvez não deixe você gastar: um jogador não conseguiu fazer um pagamento pelo celular com elas. O Save Garage adiciona no máximo {2} pilhas: com milhares delas, o jogo quase travava a cada pagamento. Use só se você estiver de acordo com isso.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Dos ${1} no banco, ${0} estão em pilhas extras que o jogo talvez não deixe você gastar. Com o banco em ${2} ou menos, dá para gastar tudo. Tantas pilhas podem fazer o jogo quase travar na hora de pagar."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Dos ${1} no banco, ${0} estão em pilhas extras que o jogo talvez não deixe você gastar. Com o banco em ${2} ou menos, dá para gastar tudo. Tantas pilhas podem fazer o jogo quase travar na hora de pagar.",
+"Health, stamina, melee and focus bars": "Barras de vida, vigor, corpo a corpo e foco",
+"Health bar": "Barra de vida",
+"Stamina bar": "Barra de vigor",
+"Melee bar": "Barra de corpo a corpo",
+"Focus bar": "Barra de foco",
+"Max everything": "Absolutamente tudo no máximo",
+"The game keeps a capacity in four places, and all four are set together.": "O jogo guarda uma capacidade em quatro lugares, e os quatro são definidos juntos.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} é o maior valor que o jogo grava; as barras são separadas dos níveis acima e do medidor especial.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "O PS5 se conectou, mas a conexão de dados IPv6 não chegou à porta TCP {0}.",
+"Use the same home network on both devices.": "Use a mesma rede doméstica nos dois aparelhos.",
+"Check for guest Wi-Fi or client isolation.": "Verifique se há Wi-Fi de convidados ou isolamento de clientes.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "No Windows, veja app/docs/transfer-network.md para corrigir o firewall da rede privada.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "O jogo guarda uma capacidade em quatro lugares, e os quatro são definidos juntos. {0} é o maior valor que o jogo grava; as barras são separadas dos níveis acima e do medidor especial.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "Use a mesma rede doméstica nos dois aparelhos. Verifique se há Wi-Fi de convidados ou isolamento de clientes."
 }

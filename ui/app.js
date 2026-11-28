@@ -1343,8 +1343,10 @@
     if (!G || G.problem) return worldField(name, 'experimental', G ? ERR['save_' + G.problem] || ERR.save_layout_changed : 'This part of the save can’t be read yet.', '');
     const c = G.characters.find(x => x.key === key);
     if (!c) return '';
-    const atMax = CAPACITIES.every(q => c.capacities[q]?.value === G.max && dg[q] == null);
-    const cells = CAPACITIES.map(q => {
+    // a bar whose copies disagree (common in game saves) still counts as a change at its shown value, which repairs it
+    const full = x => x && x.value === G.max && x.consistent !== false;
+    const atMax = CAPACITIES.every(q => !c.capacities[q] || (full(c.capacities[q]) && dg[q] == null));
+    const cells = CAPACITIES.filter(q => c.capacities[q]).map(q => {
       const x = c.capacities[q], now = x?.value;
       return worldCell({what: q, who: key, label: CAPACITY_LABEL[q], min: 0, max: G.max, step: 1, value: dg[q] ?? now,
         init: now, was: String(now), changed: dg[q] != null});
@@ -1440,7 +1442,7 @@
       if (!x) return;
       const ok = el.value.trim() !== '' && Number.isInteger(v) && v >= Number(el.min) && v <= Number(el.max);
       el.setAttribute('aria-invalid', ok ? 'false' : 'true');
-      const same = v === x.value;
+      const same = v === x.value && x.consistent !== false;
       const all = d.growth || {}, ch = all[who] || {};
       if (!ok || same) delete ch[what]; else ch[what] = v;
       if (Object.keys(ch).length) all[who] = ch; else delete all[who];
@@ -2025,7 +2027,7 @@
         if (Object.keys(all).length) d.levels = all; else delete d.levels;
       } else if (what === 'capacities') {         // one character's four bars, each to the maximum the game writes
         const c = w.growth?.characters?.find(x => x.key === who), all = d.growth || {}, ch = {};
-        if (a === 'world-fill') for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && x.value !== x.max) ch[q] = x.max; }
+        if (a === 'world-fill') for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && (x.value !== x.max || x.consistent === false)) ch[q] = x.max; }
         if (Object.keys(ch).length) all[who] = ch; else delete all[who];
         if (Object.keys(all).length) d.growth = all; else delete d.growth;
       } else if (who) {                           // one character's special meter, skills or vest
@@ -2040,7 +2042,7 @@
       else delete d.armour;
       if (what === 'everything') {                // also fill the four bars and the special meter for that character
         const c = w.growth?.characters?.find(x => x.key === who), all = d.growth || {}, ch = {};
-        for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && x.value !== x.max) ch[q] = x.max; }
+        for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && (x.value !== x.max || x.consistent === false)) ch[q] = x.max; }
         if (Object.keys(ch).length) all[who] = ch; else delete all[who];
         if (Object.keys(all).length) d.growth = all; else delete d.growth;
         const cur = w.player?.characters?.find(x => x.key === who);

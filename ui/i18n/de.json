@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage fügt höchstens {0} Stapel hinzu: Mit Tausenden davon fror das Spiel bei jeder Zahlung fast ein.",
 "This many stacks can make the game nearly freeze when it pays.": "So viele Stapel können das Spiel beim Bezahlen fast einfrieren lassen.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "Bis zu ${0}. Beträge über ${1} kommen in zusätzliche Stapel, die du im Spiel womöglich nicht ausgeben kannst: Ein Spieler konnte damit keine Zahlung übers Handy leisten. Save Garage fügt höchstens {2} Stapel hinzu: Mit Tausenden davon fror das Spiel bei jeder Zahlung fast ein. Nutze es nur, wenn das für dich in Ordnung ist.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Von den ${1} auf der Bank liegen ${0} in zusätzlichen Stapeln, die du im Spiel womöglich nicht ausgeben kannst. Wenn du die Bank auf ${2} oder weniger setzt, bleibt alles ausgebbar. So viele Stapel können das Spiel beim Bezahlen fast einfrieren lassen."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Von den ${1} auf der Bank liegen ${0} in zusätzlichen Stapeln, die du im Spiel womöglich nicht ausgeben kannst. Wenn du die Bank auf ${2} oder weniger setzt, bleibt alles ausgebbar. So viele Stapel können das Spiel beim Bezahlen fast einfrieren lassen.",
+"Health, stamina, melee and focus bars": "Gesundheits-, Ausdauer-, Nahkampf- und Fokusleiste",
+"Health bar": "Gesundheitsleiste",
+"Stamina bar": "Ausdauerleiste",
+"Melee bar": "Nahkampfleiste",
+"Focus bar": "Fokusleiste",
+"Max everything": "Alles auf Max.",
+"The game keeps a capacity in four places, and all four are set together.": "Das Spiel speichert eine Kapazität an vier Stellen, und alle vier werden zusammen gesetzt.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} ist der höchste Wert, den das Spiel schreibt; die Leisten sind unabhängig von den Stufen darüber und von der Spezialanzeige.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "Die PS5 hat sich verbunden, aber die IPv6-Datenverbindung hat TCP-Port {0} nicht erreicht.",
+"Use the same home network on both devices.": "Nutze auf beiden Geräten dasselbe Heimnetz.",
+"Check for guest Wi-Fi or client isolation.": "Prüfe, ob ein Gast-WLAN oder eine Client-Isolation aktiv ist.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Unter Windows steht in app/docs/transfer-network.md, wie du die Firewall für private Netzwerke anpasst.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "Das Spiel speichert eine Kapazität an vier Stellen, und alle vier werden zusammen gesetzt. {0} ist der höchste Wert, den das Spiel schreibt; die Leisten sind unabhängig von den Stufen darüber und von der Spezialanzeige.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "Nutze auf beiden Geräten dasselbe Heimnetz. Prüfe, ob ein Gast-WLAN oder eine Client-Isolation aktiv ist."
 }

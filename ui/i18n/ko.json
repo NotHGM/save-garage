@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage는 묶음을 최대 {0}개까지만 추가해요. 묶음이 수천 개일 때는 결제할 때마다 게임이 거의 멈췄어요.",
 "This many stacks can make the game nearly freeze when it pays.": "묶음이 이렇게 많으면 결제할 때 게임이 거의 멈출 수 있어요.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "최대 ${0}. ${1} 초과 금액은 추가 묶음에 들어가서 게임에서 쓰지 못할 수도 있어요. 한 플레이어는 이 돈으로 전화 결제를 하지 못했어요. Save Garage는 묶음을 최대 {2}개까지만 추가해요. 묶음이 수천 개일 때는 결제할 때마다 게임이 거의 멈췄어요. 괜찮은 경우에만 사용하세요.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "은행에 있는 ${1} 중 ${0}만큼은 추가 묶음에 들어 있어서 게임에서 쓰지 못할 수도 있어요. 은행 금액을 ${2} 이하로 설정하면 모든 돈을 쓸 수 있어요. 묶음이 이렇게 많으면 결제할 때 게임이 거의 멈출 수 있어요."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "은행에 있는 ${1} 중 ${0}만큼은 추가 묶음에 들어 있어서 게임에서 쓰지 못할 수도 있어요. 은행 금액을 ${2} 이하로 설정하면 모든 돈을 쓸 수 있어요. 묶음이 이렇게 많으면 결제할 때 게임이 거의 멈출 수 있어요.",
+"Health, stamina, melee and focus bars": "체력, 스태미나, 근접 전투, 집중력 바",
+"Health bar": "체력 바",
+"Stamina bar": "스태미나 바",
+"Melee bar": "근접 전투 바",
+"Focus bar": "집중력 바",
+"Max everything": "전부 최대",
+"The game keeps a capacity in four places, and all four are set together.": "게임은 각 최대치를 네 곳에 저장하므로 네 곳을 모두 함께 설정해요.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0}은(는) 게임이 쓰는 가장 높은 값이에요. 바는 위의 레벨이나 특수 게이지와는 별개예요.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5는 연결됐지만 IPv6 데이터 연결이 TCP 포트 {0}에 닿지 않았어요.",
+"Use the same home network on both devices.": "두 기기를 같은 홈 네트워크에 연결하세요.",
+"Check for guest Wi-Fi or client isolation.": "게스트 Wi-Fi나 클라이언트 격리가 켜져 있지 않은지 확인하세요.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Windows에서는 app/docs/transfer-network.md에서 개인 네트워크 방화벽 설정 방법을 확인하세요.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "게임은 각 최대치를 네 곳에 저장하므로 네 곳을 모두 함께 설정해요. {0}은(는) 게임이 쓰는 가장 높은 값이에요. 바는 위의 레벨이나 특수 게이지와는 별개예요.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "두 기기를 같은 홈 네트워크에 연결하세요. 게스트 Wi-Fi나 클라이언트 격리가 켜져 있지 않은지 확인하세요."
 }

@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garageが追加する束は最大{0}個です。束が数千個あると、支払いのたびにゲームがほとんど固まりました。",
 "This many stacks can make the game nearly freeze when it pays.": "これほど束が多いと、支払いのときにゲームがほとんど固まることがあります。",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "最大${0}。${1}を超える分は追加の束に入り、ゲーム内で使えない可能性があります。あるプレイヤーは、この束のお金で電話での支払いができませんでした。Save Garageが追加する束は最大{2}個です。束が数千個あると、支払いのたびにゲームがほとんど固まりました。それで問題ない場合にだけ使ってください。",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "銀行の${1}のうち${0}は追加の束に入っていて、ゲーム内で使えない可能性があります。銀行の残高を${2}以下にすれば、全額を使える状態に保てます。これほど束が多いと、支払いのときにゲームがほとんど固まることがあります。"
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "銀行の${1}のうち${0}は追加の束に入っていて、ゲーム内で使えない可能性があります。銀行の残高を${2}以下にすれば、全額を使える状態に保てます。これほど束が多いと、支払いのときにゲームがほとんど固まることがあります。",
+"Health, stamina, melee and focus bars": "体力・スタミナ・近接・集中力のバー",
+"Health bar": "体力バー",
+"Stamina bar": "スタミナバー",
+"Melee bar": "近接バー",
+"Focus bar": "集中力バー",
+"Max everything": "何もかも最大",
+"The game keeps a capacity in four places, and all four are set together.": "ゲームは各キャパシティを4か所に保存しているため、4か所すべてをまとめて設定します。",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0}はゲームが書き込む最大値です。バーは上のレベルやスペシャルメーターとは別のものです。",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5は接続しましたが、IPv6のデータ接続がTCPポート{0}に届いていません。",
+"Use the same home network on both devices.": "両方の機器を同じ家庭内ネットワークにつないでください。",
+"Check for guest Wi-Fi or client isolation.": "ゲスト用Wi-Fiやクライアント分離が有効になっていないか確認してください。",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Windowsでは、プライベートネットワークのファイアウォールの直し方をapp/docs/transfer-network.mdで確認してください。",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "ゲームは各キャパシティを4か所に保存しているため、4か所すべてをまとめて設定します。{0}はゲームが書き込む最大値です。バーは上のレベルやスペシャルメーターとは別のものです。",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "両方の機器を同じ家庭内ネットワークにつないでください。ゲスト用Wi-Fiやクライアント分離が有効になっていないか確認してください。"
 }

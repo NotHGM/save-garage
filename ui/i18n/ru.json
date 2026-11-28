@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "Save Garage добавляет не больше {0} пачек: с тысячами пачек игра почти зависала при каждой оплате.",
 "This many stacks can make the game nearly freeze when it pays.": "Из-за такого количества пачек игра может почти зависать при оплате.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "До ${0}. Суммы сверх ${1} попадают в дополнительные пачки, которые игра может не дать тебе потратить: один игрок не смог провести с ними платёж по телефону. Save Garage добавляет не больше {2} пачек: с тысячами пачек игра почти зависала при каждой оплате. Используй это, только если тебя это устраивает.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Из ${1} в банке ${0} лежит в дополнительных пачках, которые игра может не дать тебе потратить. Если поставить в банке ${2} или меньше, все деньги останутся доступными для трат. Из-за такого количества пачек игра может почти зависать при оплате."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "Из ${1} в банке ${0} лежит в дополнительных пачках, которые игра может не дать тебе потратить. Если поставить в банке ${2} или меньше, все деньги останутся доступными для трат. Из-за такого количества пачек игра может почти зависать при оплате.",
+"Health, stamina, melee and focus bars": "Шкалы здоровья, выносливости, ближнего боя и концентрации",
+"Health bar": "Шкала здоровья",
+"Stamina bar": "Шкала выносливости",
+"Melee bar": "Шкала ближнего боя",
+"Focus bar": "Шкала концентрации",
+"Max everything": "Вообще всё на максимум",
+"The game keeps a capacity in four places, and all four are set together.": "Игра хранит запас каждой шкалы в четырёх местах, и все четыре задаются вместе.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} — самое большое значение, которое записывает игра; шкалы не зависят от уровней выше и от особой шкалы.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5 подключилась, но IPv6-соединение для данных не дошло до TCP-порта {0}.",
+"Use the same home network on both devices.": "Подключи оба устройства к одной домашней сети.",
+"Check for guest Wi-Fi or client isolation.": "Проверь, не включены ли гостевой Wi-Fi или изоляция клиентов.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "В Windows см. app/docs/transfer-network.md, чтобы исправить брандмауэр для частной сети.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "Игра хранит запас каждой шкалы в четырёх местах, и все четыре задаются вместе. {0} — самое большое значение, которое записывает игра; шкалы не зависят от уровней выше и от особой шкалы.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "Подключи оба устройства к одной домашней сети. Проверь, не включены ли гостевой Wi-Fi или изоляция клиентов."
 }

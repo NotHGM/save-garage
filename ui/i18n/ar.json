@@ -1520,5 +1520,19 @@
 "Save Garage adds at most {0} stacks: with thousands of them, the game nearly froze whenever it paid.": "يضيف Save Garage ‏{0} رزمة على الأكثر: مع آلاف الرزم كانت اللعبة تكاد تتجمد عند كل دفعة.",
 "This many stacks can make the game nearly freeze when it pays.": "قد يجعل هذا العدد من الرزم اللعبة تكاد تتجمد عند الدفع.",
 "Up to ${0}. Amounts above ${1} go into extra stacks the game may not let you spend: a player couldn’t make a phone payment with them. Save Garage adds at most {2} stacks: with thousands of them, the game nearly froze whenever it paid. Use it only if you’re fine with that.": "حتى ${0}. تذهب المبالغ التي تتجاوز ${1} إلى رزم إضافية قد لا تسمح لك اللعبة بإنفاقها: لم يتمكن أحد اللاعبين من إجراء دفعة عبر الهاتف بها. يضيف Save Garage ‏{2} رزمة على الأكثر: مع آلاف الرزم كانت اللعبة تكاد تتجمد عند كل دفعة. لا تستخدمه إلا إذا كان ذلك مقبولًا لديك.",
-"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "من أصل ${1} في البنك، يوجد ${0} في رزم إضافية قد لا تسمح لك اللعبة بإنفاقها. ضبط البنك على ${2} أو أقل يُبقي كل المال قابلًا للإنفاق. قد يجعل هذا العدد من الرزم اللعبة تكاد تتجمد عند الدفع."
+"${0} of the ${1} in the bank sits in extra stacks the game may not let you spend. Setting the bank to ${2} or less keeps everything spendable. This many stacks can make the game nearly freeze when it pays.": "من أصل ${1} في البنك، يوجد ${0} في رزم إضافية قد لا تسمح لك اللعبة بإنفاقها. ضبط البنك على ${2} أو أقل يُبقي كل المال قابلًا للإنفاق. قد يجعل هذا العدد من الرزم اللعبة تكاد تتجمد عند الدفع.",
+"Health, stamina, melee and focus bars": "أشرطة الصحة والتحمّل والقتال القريب والتركيز",
+"Health bar": "شريط الصحة",
+"Stamina bar": "شريط التحمّل",
+"Melee bar": "شريط القتال القريب",
+"Focus bar": "شريط التركيز",
+"Max everything": "الأقصى لكل شيء",
+"The game keeps a capacity in four places, and all four are set together.": "تحفظ اللعبة السعة في أربعة أماكن، وتُضبط الأربعة معًا.",
+"{0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "{0} هي أعلى قيمة تكتبها اللعبة؛ والأشرطة منفصلة عن المستويات أعلاه وعن المقياس الخاص.",
+"The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "اتصل جهاز PS5، لكن اتصال بيانات IPv6 لم يصل إلى منفذ TCP رقم {0}.",
+"Use the same home network on both devices.": "استخدم الشبكة المنزلية نفسها على الجهازين.",
+"Check for guest Wi-Fi or client isolation.": "تحقق من شبكة واي فاي للضيوف أو من عزل الأجهزة.",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "في Windows، راجع app/docs/transfer-network.md لإصلاح جدار الحماية للشبكة الخاصة.",
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "تحفظ اللعبة السعة في أربعة أماكن، وتُضبط الأربعة معًا. {0} هي أعلى قيمة تكتبها اللعبة؛ والأشرطة منفصلة عن المستويات أعلاه وعن المقياس الخاص.",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "استخدم الشبكة المنزلية نفسها على الجهازين. تحقق من شبكة واي فاي للضيوف أو من عزل الأجهزة."
 }
