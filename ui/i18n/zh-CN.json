@@ -1,4 +1,12 @@
 {
+"Long-term capacities": "长期成长上限",
+"Health capacity": "生命上限",
+"Stamina capacity": "体力上限",
+"Melee stamina capacity": "近战耐力上限",
+"Focus capacity": "专注上限",
+"Max available capacities": "拉满此角色的成长上限",
+"Max both characters’ capacities": "拉满两人八项上限",
+"Saved values are shown in order: first slot, second slot, points and rank.": "四个存档值依次为角色数组第一处、第二处、统计点数和评级。",
 "Windows could not list the network adapters. Extract the complete Windows package into a new folder and start the editor there.": "Windows 未能读取网卡列表。请把完整 Windows 安装包解压到新文件夹，从那里启动编辑器。",
 "This transfer needs IPv6 on the local network.": "这次回传需要局域网 IPv6，请检查电脑连接 PS5 的网卡。",
 "Network adapter": "网卡",

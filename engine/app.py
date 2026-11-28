@@ -36,7 +36,7 @@ OK_HOSTS = ['127.0.0.1', 'localhost'] + ([BIND] if BIND not in ('', '0.0.0.0', '
 GTA_TITLES = ['PPSA01547', 'PPSA38500', 'PPSA29660']   # GTA VI title IDs (regions); PPSA29660: GarlicSaves treats it as GTA VI too
 # the World tab's edits: world.py (time, health, armour), player.py (each character and the relationship), levels.py
 # (strength, cardio and focus), fog.py (the map)
-WORLD_KEYS = ('time', 'health', 'armour', 'lucia', 'jason', 'relationship', 'levels', 'fog')
+WORLD_KEYS = ('time', 'health', 'armour', 'lucia', 'jason', 'relationship', 'levels', 'capacities', 'fog')
 NOWIN = 0x08000000 if os.name == 'nt' else 0
 PY = sys.executable
 LAST_SEEN = {'t': time.time()}
@@ -1414,13 +1414,13 @@ class H(BaseHTTPRequestHandler):
             if not slot:
                 return self._send(404, {'error': 'no_slot'})
             try:
-                import world, player, levels, fog
+                import world, player, levels, capacities, fog
                 b = slot_bytes(slot)
                 out = world.read(b)
             except Exception as e:
                 return self._send(500, {'error': 'internal', 'detail': repr(e)[:300]})
             out['errors'] = {}
-            for key, mod in (('player', player), ('levels', levels), ('fog', fog)):   # each on its own: one that can't be read leaves the rest working
+            for key, mod in (('player', player), ('levels', levels), ('capacities', capacities), ('fog', fog)):   # each on its own: one that can't be read leaves the rest working
                 try:
                     out[key] = mod.read(b)
                 except Exception as e:

@@ -99,9 +99,13 @@ no progress in any save checked, with the 23 cheats they are between them.
 ## GET /api/world?file=…
 
 The time of day (`clock`), `health` and `healthMax` (250, the game's overpowered maximum), and the armour of both
-characters' outfits (`armour`, `armourMax`). Two more parts are read on their own; one a save can't show is `null`,
+characters' outfits (`armour`, `armourMax`). The following parts are read on their own; one a save can't show is `null`,
 and `errors` says why:
 
+- `capacities`: available long-term capacities by character and field, e.g. `jason_healthmax`. Each entry includes
+  its label and four integer copies in order (character slot, slot + 30, stat points, stat rank).
+  In `POST /api/patch` send `{"world":{"capacities":{"jason_healthmax":100}}}` alongside the slot selection.
+  Each requested value must be an integer from 0 to 100. Missing or unrecognised records cannot be edited.
 - `player`: `characters`, one per character (`key` `lucia` or `jason`, `name`), with `meter` (attribute slot 24),
   `skills` (the values of slots 9, 10, 13, 14, 15, 19, 20 and 35), `profile` (the criminal profile score),
   `attributesProblem` (a refusal code when the attributes can't be edited) and `vest`

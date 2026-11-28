@@ -602,7 +602,7 @@
   // World edits: each key is one change, except a character's object ({meter, skills, profile, vest}), where each counts,
   // and the levels ({lucia: {muscle, cardio, focus}, jason: {...}}), where each level counts
   const worldCount = w => Object.entries(w || {}).reduce((n, [k, v]) => n + (k === 'lucia' || k === 'jason' ? Object.keys(v || {}).length
-    : k === 'levels' ? Object.values(v || {}).reduce((m, c) => m + Object.keys(c || {}).length, 0) : 1), 0);
+    : k === 'capacities' ? Object.keys(v || {}).length : k === 'levels' ? Object.values(v || {}).reduce((m, c) => m + Object.keys(c || {}).length, 0) : 1), 0);
   // guns to add: {lucia: [weapon ids], jason: [...]}, each gun one change
   const gunCount = g => Object.values(g || {}).reduce((n, v) => n + (v || []).length, 0);
   const editCount = d => Object.keys(d.money).length + Object.keys(d.ammo).length + Object.keys(d.stats).length + worldCount(d.world)
@@ -1279,7 +1279,7 @@
           <div class="inputs">${d.armour === 'full' ? '<span class="note">Will be filled. Save edits to apply it.</span> <button class="btn small" data-act="world-undo" data-what="armour">Undo</button>'
             : `<button class="btn small" data-act="world-fill" data-what="armour" ${w.armour >= w.armourMax ? 'disabled' : ''}>${w.armour >= w.armourMax ? 'Already full' : 'Fill armour'}</button>`}</div></div>
       </div>
-      ${mapGroup(s)}${characterGroups(s)}`;
+      ${mapGroup(s)}${characterGroups(s)}${capacityGroup(w, d)}`;
   }
 
   // a World field with its own risk label; help is plain text
@@ -1371,6 +1371,23 @@
     return `<div class="group"><div class="section-head"><h3>Jason and Lucia</h3></div><div class="fields">${worldField('Relationship', 'experimental', help, ctl)}</div></div>`;
   }
 
+  function capacityGroup(w, d) {
+    const entries = Object.entries(w.capacities || {});
+    if (!entries.length) return '';
+    const groups = ['lucia', 'jason'].map(who => {
+      const rows = entries.filter(([key]) => key.startsWith(who + '_'));
+      if (!rows.length) return '';
+      const cells = rows.map(([key, row]) => worldCell({what: key, label: T(row.label),
+        min: 0, max: 100, step: 1, value: d.capacities?.[key] ?? row.copies[0], init: row.copies[0],
+        was: row.copies.join(' / '), changed: d.capacities?.[key] != null})
+        + `<small>${row.copies.join(' / ')}</small>`).join('');
+      return `<div class="field"><h4>${who === 'lucia' ? 'Lucia' : 'Jason'}</h4><div class="inputs">${cells}
+        <button class="btn small" data-act="max-capacities" data-who="${who}">Max available capacities</button></div></div>`;
+    }).join('');
+    return `<div class="group"><h3>Long-term capacities</h3><p>Saved values are shown in order: first slot, second slot, points and rank.</p>
+      ${groups}<button class="btn small" data-act="max-capacities">Max both characters’ capacities</button></div>`;
+  }
+
   function onWorld(el) {
     const s = slotOf(S.slot);
     if (!s || !S.world[s.file]) return;
@@ -1401,6 +1418,14 @@
         if (Object.keys(ch).length) d[who] = ch; else delete d[who];
       }
       mark(el.closest('.cell'), ok && !same, el);
+    } else if (Object.hasOwn(w.capacities || {}, what)) {
+      const ok = el.value.trim() !== '' && Number.isInteger(v) && v >= 0 && v <= 100;
+      const changed = ok && w.capacities[what].copies.some(n => n !== v);
+      const edits = d.capacities || {};
+      if (changed) edits[what] = v; else delete edits[what];
+      if (Object.keys(edits).length) d.capacities = edits; else delete d.capacities;
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      mark(el.closest('.cell'), changed, el);
     } else if (LEVELS.includes(what) && w.levels?.characters) {
       // the page shows levels from 1, the save and the drafts hold them from 0
       const who = el.dataset.who, x = w.levels.characters.find(c => c.key === who)?.levels?.[what];
@@ -1716,6 +1741,11 @@
           e.profile != null && {label: `Criminal profile (${name})`, value: c?.profile ?? '', newValue: e.profile},
           e.vest && {label: `Vest (${name})`, value: c?.vest?.armour ?? '', newValue: P?.vestArmour ?? 150}];
       }),
+      ...Object.entries(w.capacities || {}).map(([key, value]) => {
+        const row = now?.capacities?.[key];
+        return {label: (key.startsWith('lucia_') ? 'Lucia' : 'Jason') + ' / ' + T(row?.label || key),
+          value: row?.copies.join(' / ') || '', newValue: value};
+      }),
       ...Object.entries(w.levels || {}).flatMap(([k, ch]) => {
         const c = now?.levels?.characters?.find(x => x.key === k), name = c?.name || (k === 'lucia' ? 'Lucia' : 'Jason');
         return Object.entries(ch || {}).map(([a, v]) => ({label: LEVEL_REVIEW[a] ? LEVEL_REVIEW[a](name) : a, value: c?.levels?.[a] ? c.levels[a].value + 1 : '', newValue: v + 1}));
@@ -1973,6 +2003,15 @@
     if (a === 'sd-home') { S.sd[S.slot].cur = null; S.sd[S.slot].node = null; S.mainKey = ''; renderMain(); return; }
     if (a === 'sd-open') { sdOpen(S.slot, b.dataset.section, JSON.parse(b.dataset.path), b.dataset.label, false); return; }
     if (a === 'sd-more') { const c = S.sd[S.slot].cur; sdOpen(S.slot, c.section, c.path, null, true); return; }
+    if (a === 'max-capacities') {
+      const d = draftOf(S.slot).world, edits = d.capacities || {}, who = b.dataset.who;
+      for (const [key, row] of Object.entries(S.world[S.slot]?.capacities || {})) {
+        if (who && !key.startsWith(who + '_')) continue;
+        if (row.copies.some(n => n !== 100)) edits[key] = 100; else delete edits[key];
+      }
+      if (Object.keys(edits).length) d.capacities = edits; else delete d.capacities;
+      S.mainKey = ''; renderMain(); renderPending(); renderCounts(); return;
+    }
     if (a === 'world-fill' || a === 'world-undo') {
       const s = slotOf(S.slot), w = S.world[s.file], d = draftOf(s.file).world, what = b.dataset.what, who = b.dataset.who;
       if (what === 'levels') {                    // one character's strength, cardio and focus, each to its highest level
