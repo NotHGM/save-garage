@@ -112,6 +112,9 @@ and `errors` says why:
 - `levels`: `characters`, one per character (`key`, `name` and `levels`: `muscle` (strength), `cardio` and `focus`, each
   `{"value", "stat", "max"}`, counted from 0 as the save keeps them: `value` is the level the game reads, `stat` the
   copy in the stats, `max` 4 for strength and 3 for the others); `max` and `problem` (a refusal code).
+- `growth`: `characters`, one per character (`key`, `name` and `capacities`: `healthmax`, `staminamax`,
+  `meleestaminamax` and `specialabilitymax`, each `{"value", "label", "max", "consistent"}`); `max` (100) and
+  `problem` (a refusal code). `consistent` says whether the save's four copies of that capacity agree.
 - `fog`: the map's fog of war. `regions` uncovered in the save (`named` and `cells`), `known` (the 722 regions Save
   Garage knows: `knownNamed` 52, `knownCells` 670), `mapTotal` (889), `missing` (known regions the save still lacks),
   `unknown` (regions in the save that Save Garage doesn't know, kept as they are) and `problem` (a refusal code).
@@ -232,7 +235,9 @@ counts and reasons only: never the worker key, key material, the client or serve
   "lucia": {"meter": "full", "skills": 99, "profile": -25.0, "vest": true},
   "jason": {"skills": 60},                  // any of the four, for either character
   "relationship": 69,                       // within the story's caps
-  "levels": {"lucia": {"muscle": 4, "cardio": 3, "focus": 3}, "jason": {"cardio": 1}}   // counted from 0
+  "levels": {"lucia": {"muscle": 4, "cardio": 3, "focus": 3}, "jason": {"cardio": 1}},   // counted from 0
+  "growth": {"lucia": {"specialabilitymax": 100}, "jason": {"healthmax": 100, "staminamax": 100,
+             "meleestaminamax": 100, "specialabilitymax": 100}}
 }
 ```
 
@@ -242,8 +247,8 @@ Every key may be left out, and every edit is checked against the save before any
   an entry. It is refused when the map data's version isn't 9 (`fog_version`), an entry has other keys, a type other
   than 1 or 2 or a known region with the other type (`fog_entry`), or a region is listed twice (`fog_repeat`).
 - `meter` fills attribute slot 24 to 100; `skills` raises slots 9, 10, 13, 14, 15, 19, 20 and 35 to the value given
-  (1 to 99). Both only ever raise, and slots 17 and 23 and the core slots 0-3 and 30-33 are never written. The
-  attributes must have their 37 values (`attributes_layout`).
+  (1 to 99). Both only ever raise, and slots 17 and 23 are never written. `player.py` never touches the core slots
+  0-3 and 30-33; `growth` below writes four pairs there. The attributes must have their 37 values (`attributes_layout`).
 - `profile` sets the criminal profile, -100 to 0.25, written as the game writes it (float32 with six decimals).
 - `vest` puts on the vest a character owns when that character wears no armour: armour part 1 becomes 150 of 150
   and the outfit's cached-armour flag true. Refused when the character has no vest in the wardrobe (`no_vest`); a
@@ -255,6 +260,11 @@ Every key may be left out, and every edit is checked against the save before any
   reads when the save loads, and `currentlevel` in the stats, with `numlevelups` for cardio and focus so that ups minus
   downs still gives the level. A level that changes has its progress points set to 0. Refused when a record or stat
   isn't where Save Garage expects (`levels_layout`).
+- `growth` sets a health, stamina, melee-stamina or focus capacity (0 to 100), the length of the bar rather than the
+  level. All four copies are set alike: attribute slots 0-3 and their repeats at 30-33, plus the `points` and `rank`
+  rows in the stats. A game save can hold different values in those copies; in that case all four are set to the
+  chosen value. Refused when a copy is missing or not an int in range (`growth_layout`). The game kept 100 after a
+  PS5 loaded an edited save and wrote it back.
 
 Out-of-range values are `out_of_range`, wrong types `bad_value`, and unknown keys in a character's object
 `bad_request` (other keys of `world` are ignored); in the job's error they carry the `save_` prefix. Applying the

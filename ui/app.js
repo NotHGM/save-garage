@@ -600,9 +600,9 @@
                            raw: Object.values(d.raw || {}), completion: JSON.parse(JSON.stringify(d.completion || {})), guns: JSON.parse(JSON.stringify(d.guns || {}))});
   const compCount = c => ['compendium', 'discovery', 'challenges', 'gyms', 'activities', 'robberies', 'fencing', 'activities2', 'hoops', 'vehicles', 'collectibles', 'cheats'].filter(k => c && c[k]).length;
   // World edits: each key is one change, except a character's object ({meter, skills, profile, vest}), where each counts,
-  // and the levels ({lucia: {muscle, cardio, focus}, jason: {...}}), where each level counts
+  // and the levels and capacities ({lucia: {muscle, cardio, focus}, jason: {...}}), where each value counts
   const worldCount = w => Object.entries(w || {}).reduce((n, [k, v]) => n + (k === 'lucia' || k === 'jason' ? Object.keys(v || {}).length
-    : k === 'levels' ? Object.values(v || {}).reduce((m, c) => m + Object.keys(c || {}).length, 0) : 1), 0);
+    : k === 'levels' || k === 'growth' ? Object.values(v || {}).reduce((m, c) => m + Object.keys(c || {}).length, 0) : 1), 0);
   // guns to add: {lucia: [weapon ids], jason: [...]}, each gun one change
   const gunCount = g => Object.values(g || {}).reduce((n, v) => n + (v || []).length, 0);
   const editCount = d => Object.keys(d.money).length + Object.keys(d.ammo).length + Object.keys(d.stats).length + worldCount(d.world)
@@ -1306,18 +1306,21 @@
     return `<div class="group"><div class="section-head"><h3>Map</h3></div><div class="fields">${worldField('Reveal the map', 'untested', help, ctl)}</div></div>`;
   }
 
-  // Lucia and Jason: special meter, skills, levels, criminal profile and a vest each, then their relationship (player.py,
-  // levels.py)
+  // Lucia and Jason: special meter, skills, levels, capacity bars, criminal profile and a vest each, then their
+  // relationship (player.py, levels.py, growth.py)
   function characterGroups(s) {
-    const P = S.world[s.file].player, L = S.world[s.file].levels, d = draftOf(s.file).world;
+    const P = S.world[s.file].player, L = S.world[s.file].levels, G = S.world[s.file].growth, d = draftOf(s.file).world;
     if (!P) return '<div class="group"><div class="section-head"><h3>Jason and Lucia</h3></div><div class="callout">This part of the save can’t be read yet.</div></div>';
-    return P.characters.map(c => characterGroup(P, c, d[c.key] || {}, L, d.levels?.[c.key] || {})).join('') + relationshipGroup(P, d);
+    return P.characters.map(c => characterGroup(P, c, d[c.key] || {}, L, d.levels?.[c.key] || {}, G, d.growth?.[c.key] || {})).join('') + relationshipGroup(P, d);
   }
 
   // strength, cardio and focus: the save counts levels from 0, the page from 1 as the game shows them
   const LEVELS = ['muscle', 'cardio', 'focus'];
   const LEVEL_LABEL = {muscle: 'Strength', cardio: 'Cardio', focus: 'Focus'};
   const LEVEL_REVIEW = {muscle: n => `Strength level (${n})`, cardio: n => `Cardio level (${n})`, focus: n => `Focus level (${n})`};
+  const CAPACITIES = ['healthmax', 'staminamax', 'meleestaminamax', 'specialabilitymax'];
+  const CAPACITY_LABEL = {healthmax: 'Health bar', staminamax: 'Stamina bar', meleestaminamax: 'Melee bar', specialabilitymax: 'Focus bar'};
+  const CAPACITY_REVIEW = {healthmax: 'Health capacity', staminamax: 'Stamina capacity', meleestaminamax: 'Melee stamina capacity', specialabilitymax: 'Focus capacity'};
   function levelsField(L, key, dl) {
     const name = 'Strength, cardio and focus';
     if (!L || L.problem) return worldField(name, 'experimental', L ? ERR['save_' + L.problem] || ERR.save_layout_changed : 'This part of the save can’t be read yet.', '');
@@ -1333,7 +1336,25 @@
       cells + `<button class="btn small" data-act="world-fill" data-what="levels" data-who="${key}" ${atMax ? 'disabled' : ''}>Max all</button>`);
   }
 
-  function characterGroup(P, c, dc, L, dl) {
+  // the length of the four bars: two copies in the attribute set and the points and rank in the stats, all written
+  // together (growth.py). A save where those copies disagree is still offered, and all four are set alike.
+  function capacityField(G, key, dg) {
+    const name = 'Health, stamina, melee and focus bars';
+    if (!G || G.problem) return worldField(name, 'experimental', G ? ERR['save_' + G.problem] || ERR.save_layout_changed : 'This part of the save can’t be read yet.', '');
+    const c = G.characters.find(x => x.key === key);
+    if (!c) return '';
+    const atMax = CAPACITIES.every(q => c.capacities[q]?.value === G.max && dg[q] == null);
+    const cells = CAPACITIES.map(q => {
+      const x = c.capacities[q], now = x?.value;
+      return worldCell({what: q, who: key, label: CAPACITY_LABEL[q], min: 0, max: G.max, step: 1, value: dg[q] ?? now,
+        init: now, was: String(now), changed: dg[q] != null});
+    }).join('');
+    return worldField(name, 'tested', `The game keeps a capacity in four places, and all four are set together. ${G.max} is the highest value the game writes; the bars are separate from the levels above and from the special meter.`,
+      cells + `<button class="btn small" data-act="world-fill" data-what="capacities" data-who="${key}" ${atMax ? 'disabled' : ''}>Max all</button> `
+        + `<button class="btn small" data-act="world-fill" data-what="everything" data-who="${key}">Max everything</button>`);
+  }
+
+  function characterGroup(P, c, dc, L, dl, G, dg) {
     const pending = (what, text) => `<span class="note">${text} Save edits to apply it.</span> <button class="btn small" data-act="world-undo" data-what="${what}" data-who="${c.key}">Undo</button>`;
     let rows = '';
     if (c.attributesProblem || !c.skills) rows += worldField('Special meter and skills', 'experimental', ERR['save_' + c.attributesProblem] || ERR.save_layout_changed, '');
@@ -1346,6 +1367,7 @@
           extra: P.skillChoices.map(v => `<button class="btn small" data-act="world-fill" data-what="skills" data-who="${c.key}" data-to="${v}">${v}</button>`).join('')}));
     }
     rows += levelsField(L, c.key, dl);
+    rows += capacityField(G, c.key, dg);
     if (c.profile != null) {
       const was = nf2.format(c.profile);
       rows += worldField('Criminal profile', 'experimental', `Now ${was}. The game calls it the criminal profile: a temperament score behind the Professional, Hardened, Violent, Psycho and Irredeemable profiles in the Jason & Lucia menu. Which score gives which profile isn’t known yet. Lucia starts a new game at ${nf.format(P.profileNewGame)}; saves written by the game hold ${nf.format(P.profileMin)} to ${nf2.format(P.profileMax)}.`,
@@ -1412,6 +1434,17 @@
       if (!ok || same) delete ch[what]; else ch[what] = v - 1;
       if (Object.keys(ch).length) all[who] = ch; else delete all[who];
       if (Object.keys(all).length) d.levels = all; else delete d.levels;
+      mark(el.closest('.cell'), ok && !same, el);
+    } else if (CAPACITIES.includes(what) && w.growth?.characters) {
+      const who = el.dataset.who, x = w.growth.characters.find(c => c.key === who)?.capacities?.[what];
+      if (!x) return;
+      const ok = el.value.trim() !== '' && Number.isInteger(v) && v >= Number(el.min) && v <= Number(el.max);
+      el.setAttribute('aria-invalid', ok ? 'false' : 'true');
+      const same = v === x.value;
+      const all = d.growth || {}, ch = all[who] || {};
+      if (!ok || same) delete ch[what]; else ch[what] = v;
+      if (Object.keys(ch).length) all[who] = ch; else delete all[who];
+      if (Object.keys(all).length) d.growth = all; else delete d.growth;
       mark(el.closest('.cell'), ok && !same, el);
     }
     renderPending(); renderCounts();
@@ -1726,6 +1759,10 @@
         const c = now?.levels?.characters?.find(x => x.key === k), name = c?.name || (k === 'lucia' ? 'Lucia' : 'Jason');
         return Object.entries(ch || {}).map(([a, v]) => ({label: LEVEL_REVIEW[a] ? LEVEL_REVIEW[a](name) : a, value: c?.levels?.[a] ? c.levels[a].value + 1 : '', newValue: v + 1}));
       }),
+      ...Object.entries(w.growth || {}).flatMap(([k, ch]) => {
+        const c = now?.growth?.characters?.find(x => x.key === k), name = c?.name || (k === 'lucia' ? 'Lucia' : 'Jason');
+        return Object.entries(ch || {}).map(([q, v]) => ({label: `${CAPACITY_REVIEW[q] || q} (${name})`, value: c?.capacities?.[q]?.value ?? '', newValue: v}));
+      }),
       w.relationship != null && {label: 'Relationship', value: P?.relationship?.value ?? '', newValue: w.relationship}].filter(Boolean);
     const cp = d.completion || {};
     const compList = [cp.compendium && {label: 'Compendium: ' + cp.compendium.groups.join(' and '), value: '', newValue: 'discovered'},
@@ -1981,11 +2018,16 @@
     if (a === 'sd-more') { const c = S.sd[S.slot].cur; sdOpen(S.slot, c.section, c.path, null, true); return; }
     if (a === 'world-fill' || a === 'world-undo') {
       const s = slotOf(S.slot), w = S.world[s.file], d = draftOf(s.file).world, what = b.dataset.what, who = b.dataset.who;
-      if (what === 'levels') {                    // one character's strength, cardio and focus, each to its highest level
+      if (what === 'levels' || what === 'everything') {   // one character's strength, cardio and focus, to the highest
         const c = w.levels?.characters?.find(x => x.key === who), all = d.levels || {}, ch = {};
         for (const a of LEVELS) { const x = c?.levels?.[a]; if (x && x.value !== x.max) ch[a] = x.max; }
         if (Object.keys(ch).length) all[who] = ch; else delete all[who];
         if (Object.keys(all).length) d.levels = all; else delete d.levels;
+      } else if (what === 'capacities') {         // one character's four bars, each to the maximum the game writes
+        const c = w.growth?.characters?.find(x => x.key === who), all = d.growth || {}, ch = {};
+        if (a === 'world-fill') for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && x.value !== x.max) ch[q] = x.max; }
+        if (Object.keys(ch).length) all[who] = ch; else delete all[who];
+        if (Object.keys(all).length) d.growth = all; else delete d.growth;
       } else if (who) {                           // one character's special meter, skills or vest
         const ch = d[who] || {}, c = w.player.characters.find(x => x.key === who);
         if (a === 'world-undo') delete ch[what];
@@ -1996,6 +2038,16 @@
       else if (what === 'health') d.health = w.healthMax;
       else if (a === 'world-fill') d.armour = 'full';
       else delete d.armour;
+      if (what === 'everything') {                // also fill the four bars and the special meter for that character
+        const c = w.growth?.characters?.find(x => x.key === who), all = d.growth || {}, ch = {};
+        for (const q of CAPACITIES) { const x = c?.capacities?.[q]; if (x && x.value !== x.max) ch[q] = x.max; }
+        if (Object.keys(ch).length) all[who] = ch; else delete all[who];
+        if (Object.keys(all).length) d.growth = all; else delete d.growth;
+        const cur = w.player?.characters?.find(x => x.key === who);
+        if (cur && cur.meter < (w.player.meterFull ?? 100)) {
+          const pc = d[who] || {}; pc.meter = 'full'; d[who] = pc;
+        }
+      }
       S.mainKey = ''; renderMain(); renderPending(); renderCounts();
       return;
     }
