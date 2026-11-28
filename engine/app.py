@@ -1274,6 +1274,9 @@ def job_upload(target=None):
     p = spawn(['poc.dt_source'], env=env)
     stage('waiting_console')
     files = 0; finished = False
+    waiting_for_data = False
+    data_seen = False
+    disconnects = 0
     for line in p.stdout:
         line = line.rstrip(); low = line.lower()
         hint = upload_network_hint(line)
@@ -1289,8 +1292,21 @@ def job_upload(target=None):
             raise Fail('adapter_query_failed', line)
         if 'psutil package is missing' in low:
             raise Fail('tool_failed', line)     # a source checkout that predates the psutil requirement
-        if '[tcp] connection from' in low:
+        if '[compat] the ps5 asked for the newer console info' in low:
+            waiting_for_data = not data_seen
+        elif '[data] connection from' in low:
+            data_seen = True
+            waiting_for_data, disconnects = False, 0
             stage('console_connected', hint=None)
+        elif waiting_for_data and not files and '[cmd] session ended: connection closed' in low:
+            waiting_for_data = False
+            disconnects += 1
+            if disconnects >= 2:
+                stage('waiting_console', hint={'code': 'ipv6_data_unreached', 'platform': sys.platform})
+                log('The console reconnected without opening the IPv6 data connection (TCP 1005).')
+        if '[tcp] connection from' in low:
+            if disconnects < 2:
+                stage('console_connected', hint=None)
         elif 'gfp5 id=' in low and files == 0:
             stage('transferring')
         elif 'gfp5 file complete' in low:

@@ -1623,6 +1623,12 @@
   // (job.hint from upload_network_hint, PR #14): how to turn it on, for the computer's system. The upload keeps
   // waiting, so the player can turn IPv6 on and pick Save Garage on the PS5 again.
   function uploadNetworkHelp(hint) {
+    if (hint?.code === 'ipv6_data_unreached') {
+      return `<div class="callout ipv6" role="status"><strong>The PS5 connected, but the IPv6 data connection has not reached TCP port 1005.</strong>
+        <div>Use the same home network on both devices. Check for guest Wi-Fi or client isolation.</div>
+        ${hint.platform === 'win32' ? '<div>On Windows, see app/docs/transfer-network.md for the private-network firewall repair.</div>' : ''}
+        <div>Keep this page open. Search again on the PS5 and select Save Garage.</div></div>`;
+    }
     if (hint?.code !== 'local_ipv6') return '';
     const steps = hint.platform === 'win32'
       ? 'Press Win + R, open ncpa.cpl, open the adapter properties and check Internet Protocol Version 6 (TCP/IPv6).'
