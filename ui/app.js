@@ -577,7 +577,7 @@
   // ---- drafts: what the user wants each save to look like, always relative to the original save
   function seedDraft(s) {
     if (S.drafts[s.file]) return;
-    const d = {money: {}, ammo: {}, stats: {}, world: {}, raw: {}, completion: {}, guns: {}, stacksOn: {}};
+    const d = {money: {}, ammo: {}, stats: {}, world: {}, raw: {}, completion: {}, guns: {}, stacksOn: {}, repairOn: {}};
     const a = s.applied || {};
     if (a.world) d.world = JSON.parse(JSON.stringify(a.world));
     if (a.completion) d.completion = JSON.parse(JSON.stringify(a.completion));
@@ -586,6 +586,7 @@
     for (const c of a.money || []) {
       d.money[`${c.inv}:${c.idx}`] = c;
       if (c.stacks) d.stacksOn[`${c.inv}:${c.idx}`] = true;       // saved with the bank's extra stacks: the box stays ticked
+      if (c.repair) d.repairOn[`${c.inv}:${c.idx}`] = true;       // saved with the BuckMe limit fix (issue #19)
     }
     for (const c of a.ammo || []) d.ammo[`${c.inv}:${c.idx}`] = c;
     for (const c of a.stats || []) d.stats[`${c.group}:${c.row}`] = c;
@@ -593,9 +594,11 @@
   }
 
   const rawKey = (sec, path) => sec + ':' + JSON.stringify(path);
-  const draftOf = file => S.drafts[file] || (S.drafts[file] = {money: {}, ammo: {}, stats: {}, world: {}, raw: {}, completion: {}, guns: {}, stacksOn: {}});
+  const draftOf = file => S.drafts[file] || (S.drafts[file] = {money: {}, ammo: {}, stats: {}, world: {}, raw: {}, completion: {}, guns: {}, stacksOn: {}, repairOn: {}});
   // the bank's experimental extra stacks, ticked for this bank field ("inv:idx"); its changes then carry stacks: true
   const stacksOn = (file, key) => !!draftOf(file).stacksOn?.[key];
+  // the BuckMe limit fix for this bank field: its change carries repair: true, and stays a change at the same amount
+  const repairOn = (file, key) => !!draftOf(file).repairOn?.[key];
   const draftList = d => ({money: Object.values(d.money), ammo: Object.values(d.ammo), stats: Object.values(d.stats), world: {...(d.world || {})},
                            raw: Object.values(d.raw || {}), completion: JSON.parse(JSON.stringify(d.completion || {})), guns: JSON.parse(JSON.stringify(d.guns || {}))});
   const compCount = c => ['compendium', 'discovery', 'challenges', 'gyms', 'activities', 'robberies', 'fencing', 'activities2', 'hoops', 'vehicles', 'collectibles', 'cheats'].filter(k => c && c[k]).length;
@@ -661,6 +664,10 @@
     const name = x => ({bank: 'Bank account', savings: 'Family Savings', cash: 'Cash, ' + (x.inv === 0 ? 'Lucia' : 'Jason')})[x.kind];
     // a bank already past its own boxes (versions 1.26 to 1.30 put the rest in extra stacks); stuck money has its own fix
     const over = x => x.kind === 'bank' && !(x.stuck > 0) && x.value > x.max;
+    // Family Savings boxes an older version put under the bank raise BuckMe's limit even when empty (issue #19)
+    const extra = x => x.kind === 'bank' && x.foreignBoxes > 0;
+    const fixNote = x => !extra(x) ? '' : x.stuck > 0 ? ' It also takes those boxes out of the bank, so BuckMe’s limit is the game’s own again.'
+      : ` BuckMe shows a limit $${nf.format(x.extraLimit)} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank. Fixing it takes those boxes out of the bank, so the limit is the game’s own again.`;
     const help = x => ({bank: x.stuck > 0
                           ? `BuckMe shows $${nf.format(x.value)}, but $${nf.format(x.stuck)} of it sits in Family Savings boxes that an older version of Save Garage put under the bank, and the game can’t spend it. Moving it puts as much as fits, up to $${nf.format(x.max)}, in the bank’s own money boxes.`
                           : over(x)
@@ -677,11 +684,13 @@
       ${items.length ? `<div class="fields">${items.map(x => {
         const key = `${x.inv}:${x.idx}`, exp = x.kind === 'bank' && x.maxStacks > x.max, on = exp && stacksOn(s.file, key), lim = on ? x.maxStacks : x.max;
         return `
-        <div class="field"><div class="name">${esc(name(x))}<span class="help${over(x) ? ' warn' : ''}">${esc(help(x))}</span></div>
+        <div class="field"><div class="name">${esc(name(x))}<span class="help${over(x) || extra(x) ? ' warn' : ''}">${esc(help(x) + fixNote(x))}</span></div>
           <div class="inputs">${cell({kind: 'money', key, label: 'Amount in dollars', value: x.value, display: String(x.value), unit: 'money', type: 'int', max: lim, wide: true, money: true,
             attrs: `data-inv="${x.inv}" data-idx="${x.idx}" data-label="${esc(name(x))}"`, extra: `<button class="btn small" data-act="fill" data-to="${lim}">Max</button>`
               + (x.stuck > 0 ? ` <button class="btn small primary" data-act="unstick" data-inv="${x.inv}" data-idx="${x.idx}" data-value="${x.value}" data-to="${Math.min(x.value, x.max)}">Make it spendable</button>` : '')
-              + (over(x) ? ` <button class="btn small primary" data-act="unstack" data-to="${x.max}">Make it spendable</button>` : '')})}
+              + (over(x) ? ` <button class="btn small primary" data-act="unstack" data-to="${x.max}">Make it spendable</button>` : '')
+              + (extra(x) && !(x.stuck > 0) ? (repairOn(s.file, key) ? ` <span class="note">Will be fixed. Save edits to apply it.</span> <button class="btn small" data-act="repair-undo" data-key="${key}">Undo</button>`
+                : ` ${riskTag('untested')} <button class="btn small primary" data-act="repair" data-inv="${x.inv}" data-idx="${x.idx}" data-value="${x.value}" data-stacks="${x.value > x.max ? 1 : 0}">Fix the BuckMe limit</button>`) : '')})}
           ${exp ? stacksOpt(x, key, on) : ''}</div></div>`;
       }).join('')}</div>`
         : '<div class="empty">This save has no money balances to edit.</div>'}</div>`;
@@ -1826,12 +1835,14 @@
       el.setAttribute('aria-invalid', bad ? 'true' : 'false');
       if (bad) { delete d[bucket][key]; mark(cellEl, false, el); renderPending(); renderCounts(); return; }
     }
-    if (same) delete d[bucket][key];
+    const fix = kind === 'money' && repairOn(s.file, key);
+    if (same && !fix) delete d[bucket][key];
     else {
-      const base = {value: orig, newValue, label: el.dataset.label || ''};
+      const base = {value: orig, newValue: same ? orig : newValue, label: el.dataset.label || ''};
       d[bucket][key] = kind === 'stat'
         ? {group: el.dataset.group, row: +el.dataset.row, base: +el.dataset.base, qual: +el.dataset.qual, owner: +el.dataset.owner, ...base}
-        : {inv: +el.dataset.inv, idx: +el.dataset.idx, ...base, ...(kind === 'money' && stacksOn(s.file, key) ? {stacks: true} : {})};
+        : {inv: +el.dataset.inv, idx: +el.dataset.idx, ...base, ...(kind === 'money' && stacksOn(s.file, key) ? {stacks: true} : {}),
+           ...(fix ? {repair: true} : {})};
     }
     mark(cellEl, !same, el);
     if (kind === 'stat') updateTotal(el);
@@ -1920,9 +1931,29 @@
     if (a === 'tab') { S.tab = b.dataset.tab; S.mainKey = ''; renderMain(); return; }
     if (a === 'unstick') {      // move bank money out of the Savings boxes an older version used: same or lower total, saved explicitly
       const s = slotOf(S.slot), d = draftOf(s.file);
-      d.money[`${b.dataset.inv}:${b.dataset.idx}`] = {inv: +b.dataset.inv, idx: +b.dataset.idx, value: +b.dataset.value, newValue: +b.dataset.to, label: 'Bank account (made spendable)'};
+      const key = `${b.dataset.inv}:${b.dataset.idx}`, fix = (slotOf(S.slot)?.items || []).some(x => `${x.inv}:${x.idx}` === key && x.foreignBoxes > 0);
+      d.money[key] = {inv: +b.dataset.inv, idx: +b.dataset.idx, value: +b.dataset.value, newValue: +b.dataset.to, label: 'Bank account (made spendable)', ...(fix ? {repair: true} : {})};
+      if (fix) (d.repairOn = d.repairOn || {})[key] = true;    // the Savings boxes go too, so BuckMe's limit is the game's again (issue #19)
       toast('The bank money will be moved into the bank’s own boxes when you save edits.');
       renderPending(); renderCounts();
+      return;
+    }
+    if (a === 'repair' || a === 'repair-undo') {   // the BuckMe limit fix (issue #19): the bank's amount stays as it is
+      const s = slotOf(S.slot), d = draftOf(s.file), key = a === 'repair' ? `${b.dataset.inv}:${b.dataset.idx}` : b.dataset.key;
+      d.repairOn = d.repairOn || {};
+      if (a === 'repair') {
+        d.repairOn[key] = true;
+        const cur = d.money[key];
+        d.money[key] = cur ? {...cur, repair: true}
+          : {inv: +b.dataset.inv, idx: +b.dataset.idx, value: +b.dataset.value, newValue: +b.dataset.value, label: 'Bank account (BuckMe limit fixed)', repair: true,
+             ...(b.dataset.stacks === '1' ? {stacks: true} : {})};
+        toast('The BuckMe limit will be fixed when you save edits.');
+      } else {
+        delete d.repairOn[key];
+        const cur = d.money[key];
+        if (cur) { delete cur.repair; if (cur.newValue === cur.value) delete d.money[key]; }
+      }
+      S.mainKey = ''; renderMain(); renderPending(); renderCounts();
       return;
     }
     if (a === 'unstack') {      // a bank past its own boxes, the rest in extra stacks: set it to what the boxes hold, stacks emptied

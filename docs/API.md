@@ -19,7 +19,7 @@ The whole app state, polled about once a second by the UI.
     "file": "sdimg_SAVEDATASARC0001",                 // or sdimg_sce_sdmemory, the autosave
     "subtitle": "Mission name",
     "items": [{"inv": 0, "idx": 384, "kind": "bank", "value": 85000, "max": 223844, "maxStacks": 8723844, "spendable": 85000,
-               "stuck": 0, "boxMax": 223844, "stacks": 0, "stackCap": 100}],
+               "stuck": 0, "boxMax": 223844, "stacks": 0, "stackCap": 100, "foreignBoxes": 0, "extraLimit": 0}],
     "ammo": [{"inv": 0, "idx": 120, "type": "rifle", "label": "Assault rifle ammo", "value": 280, "full": 300, "max": 300}],
     "modified": false,
     "changes": [{"kind": "bank", "from": 5000, "to": 85000}],
@@ -54,7 +54,8 @@ and may not be spendable (issue #8), and thousands of them made the game nearly 
 stacks past the cap that a bank already has don't count, so `value` can be above `maxStacks` until it is edited.
 `stacks` counts the extra stacks the bank already has, and `boxMax`, kept for compatibility, is
 where new stacks would start: `max` plus $85,000 for each of them (equal to `max` without any). `stuck` is money an older
-version left in Family Savings boxes under the bank (shown by BuckMe, not spendable; editing the bank moves it), and
+version left in Family Savings boxes under the bank (shown by BuckMe, not spendable; editing the bank moves it),
+`foreignBoxes` counts those boxes and `extraLimit` is how much they add to BuckMe's limit even when empty (issue #19), and
 `spendable` is the rest of `value`, extra stacks included. Without `stuck` money, a `value` above `max` is money in extra
 stacks, as versions 1.26.0 to 1.30.0 wrote it, or as the experimental option wrote it since 1.30.1.
 For ammo, `full` is a full load in the game (`null` where it isn't known) and `max` is the most Save Garage writes: the
@@ -160,7 +161,9 @@ the save is refused. A money edit is `{"inv": 0, "idx": 384, "value": 85000, "ne
 item's `max` is written as `max`. A bank edit with `"stacks": true` goes up to `maxStacks` instead, putting what is past
 the bank's own boxes in extra $85,000 stacks (experimental: the game may not let you spend them); `stacks` must be `true`
 or `false` (HTTP 400 otherwise). A lower bank balance is always written and empties the stacks it no longer needs, so an
-edit without `stacks` brings a bank that is in stacks back within its own boxes. Errors come back as HTTP 409
+edit without `stacks` brings a bank that is in stacks back within its own boxes. `"repair": true` on a bank change (`true`
+or `false`, bank only) also takes those Family Savings boxes and their money rows out of the bank once they are empty,
+so BuckMe's limit is the game's own again; with the same amount it changes nothing else. Errors come back as HTTP 409
 `{"error": "<code>", "detail": "…"}`. `/api/pair`, `/api/download`, `/api/patch` and `/api/upload` go through
 GarlicSaves and are refused with `not_signed_in` until Save Garage is signed in.
 

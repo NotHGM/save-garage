@@ -305,6 +305,10 @@ def scan(b):
                 item['boxMax'] = _box_limit(boxes)        # above this, the balance goes into new 85,000 stacks
                 item['stacks'] = sum(len(x['rows'][1:]) for x in boxes if x['box'] == STACK_BOX)
                 item['stackCap'] = STACK_CAP              # the most extra stacks maxStacks counts
+                foreign = [x for x in boxes if x['foreign']]  # Family Savings boxes an old version put under the bank
+                caps = {box: cap for box, _, cap in ACCOUNTS['savings'][1]}
+                item['foreignBoxes'] = len(foreign)
+                item['extraLimit'] = sum(caps.get(x['box'], 0) for x in foreign)   # what they add to BuckMe's limit
             items.append(item)
         for k, q in enumerate(v['qty']):
             if v['item'][k] == MONEY_CAT and k not in seen:
@@ -433,6 +437,118 @@ def _add_rows(txt, nth, v, parent_idx, item, slot, amounts):
     return txt
 
 
+def _remove_rows(txt, nth, rows):
+    """Take main-list rows out of the nth inventory the way the game keeps the list: the six parallel arrays lose the
+    rows, Items loses their entries and renumbers the main-list entries after them ((row << 4) | 1; the sublists' entries,
+    with other low bits, stay as they are), and ParentGuids loses the entries no remaining row points to any more, with
+    every ParentGuidIndices value (main list and sublists) renumbered. In every game-written save each ParentGuids entry
+    is used by some row and Items lists each row once (dev_scratch/check_row_removal.py), so the result keeps both.
+    Refused (layout_changed) when a row outside `rows` still hangs under a removed one, or the arrays don't line up."""
+    import featurelib as fl                     # imported here: featurelib imports this module
+    rows = set(rows)
+    if not rows:
+        return txt
+    s, _ = fl.walk(txt, '$0x7a47cb05', '$0xd3f59a5e', '$0x789bdd41')
+    inv_s, _ = fl.elements(txt, s)[nth]
+    inv = {k: (vs, ve) for k, vs, ve in fl.members(txt, inv_s)}
+
+    def span(vs, ve):
+        """(start, end) of an array's comma list inside a plain list or a typed {"$data": [...]} object, or None."""
+        if txt[vs:vs + 1] == b'[':
+            return vs + 1, ve - 1
+        m = {k: (a, z) for k, a, z in fl.members(txt, vs)}
+        return (m['$data'][0] + 1, m['$data'][1] - 1) if '$data' in m else None
+
+    def toks(sp):
+        return [] if sp is None or sp[0] == sp[1] else txt[sp[0]:sp[1]].split(b',')
+
+    main = {k: span(vs, ve) for k, vs, ve in fl.members(txt, inv[K_MAIN][0])}
+    keys = (K_GUID, K_PARENT, K_ITEM, K_SLOT, K_QTY, K_FLAG)
+    if set(main) != set(keys) or any(main[k] is None for k in keys):
+        raise SaveError('layout_changed')
+    cols = {k: toks(main[k]) for k in keys}
+    n = len(cols[K_GUID])
+    if any(len(c) != n for c in cols.values()) or not rows <= set(range(n)):
+        raise SaveError('layout_changed')
+    subs = []                                   # (span, tokens) of each sublist's ParentGuidIndices
+    for k in K_SUBLISTS:
+        if k in inv and txt[inv[k][0]:inv[k][0] + 1] == b'{':
+            m = {kk: (a, z) for kk, a, z in fl.members(txt, inv[k][0])}
+            if K_PARENT in m:
+                sp = span(*m[K_PARENT])
+                subs.append((sp, toks(sp)))
+    items_sp, parents_sp = span(*inv[K_ITEMS]), span(*inv[K_PARENTS])
+    items, parents = toks(items_sp), toks(parents_sp)
+    gone = {int(cols[K_GUID][r]) for r in rows}
+    gone_idx = {i for i, g in enumerate(parents) if int(g) in gone}
+    keep = [r for r in range(n) if r not in rows]
+    kept_refs = {int(cols[K_PARENT][r]) for r in keep} | {int(x) for _, t in subs for x in t}
+    if kept_refs & gone_idx or any(not 0 <= i < len(parents) for i in kept_refs):
+        raise SaveError('layout_changed')         # something else still hangs under a removed row
+    before = kept_refs | {int(cols[K_PARENT][r]) for r in rows}
+    drop = gone_idx | (before - kept_refs)
+    new_idx, k = {}, 0
+    for i in range(len(parents)):
+        if i not in drop:
+            new_idx[i] = k; k += 1
+    shift = sorted(rows)
+
+    def new_row(r):
+        lo, hi = 0, len(shift)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if shift[mid] < r: lo = mid + 1
+            else: hi = mid
+        return r - lo
+
+    new_items, seen = [], []
+    for x in items:
+        v = int(x)
+        if v & 0xf == 1:
+            if v >> 4 in rows:
+                continue
+            nr = new_row(v >> 4)
+            seen.append(nr)
+            new_items.append(b'%d' % ((nr << 4) | 1))
+        else:
+            new_items.append(x)
+    if sorted(seen) != list(range(len(keep))):
+        raise SaveError('layout_changed')         # Items didn't list each main row exactly once
+    edits = []
+    for key in keys:
+        vals = [cols[key][r] for r in keep]
+        if key == K_PARENT:
+            vals = [b'%d' % new_idx[int(x)] for x in vals]
+        edits.append((main[key], b','.join(vals)))
+    for sp, t in subs:
+        if sp is not None:
+            edits.append((sp, b','.join(b'%d' % new_idx[int(x)] for x in t)))
+    edits.append((items_sp, b','.join(new_items)))
+    edits.append((parents_sp, b','.join(parents[i] for i in range(len(parents)) if i not in drop)))
+    for (a, z), new in sorted(edits, key=lambda e: -e[0][0]):     # from the end, so earlier spans stay valid
+        txt = txt[:a] + new + txt[z:]
+    json.loads(txt)
+    return txt
+
+
+def _remove_foreign(txt, nth):
+    """Take the Family Savings boxes that versions before 1.24 put under checking out of the bank account, with their
+    money rows (GitHub issue #19). The game counts every box under an account in its limit, an empty one too, so they
+    left BuckMe's limit up to $1,900,000 too high. Only empty boxes go: setting the bank first moves any money out of
+    them. Returns (text, the boxes taken out)."""
+    v = _inventory(txt, nth)
+    boxes = [x for x in (_account(v, 'bank') or []) if x['foreign']]
+    if not boxes:
+        return txt, []
+    if any(v['qty'][r] for x in boxes for r in x['rows']):
+        raise SaveError('verify_failed')
+    for x in boxes:
+        if set(_children(v, x['box_row'])) - set(x['rows']):
+            raise SaveError('layout_changed')     # only its money rows may hang under a box
+    rows = [x['box_row'] for x in boxes] + [r for x in boxes for r in x['rows']]
+    return _remove_rows(txt, nth, rows), boxes
+
+
 def _fill_stacks(txt, nth, left):
     """Put what is left into checking's extra 85,000 stacks: the rows under the 85,000 box after its first, in order
     (emptied when nothing is left), then new rows under the box. Returns (text, what still did not fit)."""
@@ -458,9 +574,11 @@ def _fill_stacks(txt, nth, left):
 
 
 def patch(b, changes):
-    """changes: [{inv, idx, value (old), newValue, stacks (optional, true or false)}] -> (new file bytes, log). Values
-    above the limit are written as the limit: 'max', or for the bank with 'stacks': True, 'maxStacks', its extra 85,000
-    stacks included. A lower bank balance is always allowed, and empties the extra stacks it no longer needs."""
+    """changes: [{inv, idx, value (old), newValue, stacks (optional, true or false), repair (optional, true or false)}]
+    -> (new file bytes, log). Values above the limit are written as the limit: 'max', or for the bank with 'stacks': True,
+    'maxStacks', its extra 85,000 stacks included. A lower bank balance is always allowed, and empties the extra stacks
+    it no longer needs. 'repair': True (bank only) also takes the Family Savings boxes an old version put under the bank
+    out of it (_remove_foreign), so BuckMe's limit is the game's again; with the same total it changes nothing else."""
     ents, secs, gaps, head, tail = _load(b)
     info = scan(b); log = []
     i_inv, i_stat = _sec(ents, SEC_INV), _sec(ents, SEC_STAT)
@@ -472,8 +590,8 @@ def patch(b, changes):
         it = next((x for x in info['items'] if same_item(x, ch)), None)
         if not it or it['value'] != ch['value']:
             raise SaveError('stale_item')
-        stacks = ch.get('stacks', False)
-        if not isinstance(stacks, bool):
+        stacks, repair = ch.get('stacks', False), ch.get('repair', False)
+        if not isinstance(stacks, bool) or not isinstance(repair, bool) or (repair and it['kind'] != 'bank'):
             raise SaveError('bad_request')
         nv = int(round(ch['newValue']))
         if not 0 <= nv <= 2147483647:
@@ -483,9 +601,19 @@ def patch(b, changes):
             lim = it.get('maxStacks', lim)
         nv = min(nv, lim); old = it['value']
         if nv == old and not it.get('stuck'):      # same total, but money the game cannot spend still has to be moved
+            if repair:
+                secs[i_inv], gone = _remove_foreign(secs[i_inv], it['inv'])
+                if gone:
+                    log.append({'what': 'inventory', 'kind': 'bank_repair', 'from': it.get('extraLimit', 0), 'to': 0,
+                                'label': 'BuckMe limit fixed', 'boxes': len(gone)})
             continue
         if it['kind'] in ACCOUNTS:
             secs[i_inv] = _set_account(secs[i_inv], it['inv'], it['kind'], nv)
+            if repair:
+                secs[i_inv], gone = _remove_foreign(secs[i_inv], it['inv'])
+                if gone:
+                    log.append({'what': 'inventory', 'kind': 'bank_repair', 'from': it.get('extraLimit', 0), 'to': 0,
+                                'label': 'BuckMe limit fixed', 'boxes': len(gone)})
         else:
             secs[i_inv] = _set(secs[i_inv], _qty_span(secs[i_inv], it['inv']), it['idx'], old, nv)
         log.append({'what': 'inventory', 'kind': it['kind'], 'from': old, 'to': nv})

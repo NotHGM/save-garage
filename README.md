@@ -196,6 +196,9 @@ backups or GarlicSaves sign-in.
   boxes the game itself uses for savings goals. The bank stays within its own boxes, because shops only spend money
   from those: versions before 1.24.0 put extra money in Family Savings boxes under the bank, which BuckMe showed but
   shops couldn't spend (issue #3). Editing the bank again, or **Make it spendable** on the Money tab, moves it back.
+  Those boxes also raise BuckMe's limit by up to $1,900,000, even when empty, because the game counts every box under
+  the account (issue #19). Since 1.33.1 the Money tab says so, and **Fix the BuckMe limit** takes them out of the bank
+  so the limit is the game's own again (**Make it spendable** does that too). Not tested on a PS5 yet.
   Past its boxes, the bank can also take $85,000 stacks under its $85,000 box, which BuckMe shows in the balance.
   Versions 1.26.0 to 1.30.0 put anything past the boxes in such stacks, but they may not be spendable: a player on
   1.30.0 with about $2,000,000 in the bank couldn't make a $150,000 phone payment (issue #8). Since 1.30.1 the stacks

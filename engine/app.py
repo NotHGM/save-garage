@@ -1573,6 +1573,8 @@ class H(BaseHTTPRequestHandler):
                     raise ValueError('edits must be lists')
                 if any(isinstance(c, dict) and not isinstance(c.get('stacks', False), bool) for c in edits['money']):
                     raise ValueError('stacks must be true or false')    # the bank's opt-in to its extra 85,000 stacks
+                if any(isinstance(c, dict) and not isinstance(c.get('repair', False), bool) for c in edits['money']):
+                    raise ValueError('repair must be true or false')    # the BuckMe limit fix (issue #19)
                 if body.get('completion'):
                     c = body['completion']
                     if not isinstance(c, dict):

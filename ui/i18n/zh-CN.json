@@ -1537,5 +1537,15 @@
 "The PS5 connected, but the IPv6 data connection has not reached TCP port {0}.": "PS5 已连接，但 IPv6 数据连接尚未到达电脑的 TCP {0} 端口。",
 "Use the same home network on both devices.": "两台设备请接入同一个家庭网络。",
 "Check for guest Wi-Fi or client isolation.": "请检查访客 Wi-Fi 和无线客户端隔离。",
-"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "游戏把每项上限保存在四个地方，四处会一起设置。{0} 是游戏写入的最高值；这些条与上方的等级和特殊计量条互不相关。"
+"The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "游戏把每项上限保存在四个地方，四处会一起设置。{0} 是游戏写入的最高值；这些条与上方的等级和特殊计量条互不相关。",
+"BuckMe shows a limit ${0} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank.": "由于旧版 Save Garage 把家庭储蓄资金箱放在了银行名下，BuckMe 显示的上限比游戏给你的高 ${0}。",
+"Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "修复后会把这些资金箱移出银行，上限就会恢复为游戏本来的数值。",
+"It also takes those boxes out of the bank, so BuckMe’s limit is the game’s own again.": "同时也会把这些资金箱移出银行，BuckMe 的上限就会恢复为游戏本来的数值。",
+"Fix the BuckMe limit": "修复 BuckMe 上限",
+"The BuckMe limit will be fixed when you save edits.": "保存编辑时将修复 BuckMe 上限。",
+"Will be fixed.": "将会修复。",
+"Will be fixed. Save edits to apply it.": "将会修复。保存修改后生效。",
+"Up to ${0}: what the bank’s own money boxes hold at this point in the story. Shops can spend all of it. The limit grows as the story goes on. BuckMe shows a limit ${1} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank. Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "最多 ${0}：即剧情当前阶段银行自己的资金箱能容纳的金额。这些钱都可以在商店里花。上限会随剧情推进而提高。由于旧版 Save Garage 把家庭储蓄资金箱放在了银行名下，BuckMe 显示的上限比游戏给你的高 ${1}。修复后会把这些资金箱移出银行，上限就会恢复为游戏本来的数值。",
+"BuckMe shows ${0}, but ${1} of it sits in Family Savings boxes that an older version of Save Garage put under the bank, and the game can’t spend it. Moving it puts as much as fits, up to ${2}, in the bank’s own money boxes. It also takes those boxes out of the bank, so BuckMe’s limit is the game’s own again.": "BuckMe 显示 ${0}，但其中 ${1} 位于旧版 Save Garage 放在银行名下的家庭储蓄资金箱里，游戏无法花掉这部分钱。转移会把能放下的部分（最多 ${2}）放进银行自己的资金箱。同时也会把这些资金箱移出银行，BuckMe 的上限就会恢复为游戏本来的数值。",
+"BuckMe shows a limit ${0} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank. Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "由于旧版 Save Garage 把家庭储蓄资金箱放在了银行名下，BuckMe 显示的上限比游戏给你的高 ${0}。修复后会把这些资金箱移出银行，上限就会恢复为游戏本来的数值。"
 }

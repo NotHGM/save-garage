@@ -1534,5 +1534,15 @@
 "Check for guest Wi-Fi or client isolation.": "ゲスト用Wi-Fiやクライアント分離が有効になっていないか確認してください。",
 "On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Windowsでは、プライベートネットワークのファイアウォールの直し方をapp/docs/transfer-network.mdで確認してください。",
 "The game keeps a capacity in four places, and all four are set together. {0} is the highest value the game writes; the bars are separate from the levels above and from the special meter.": "ゲームは各キャパシティを4か所に保存しているため、4か所すべてをまとめて設定します。{0}はゲームが書き込む最大値です。バーは上のレベルやスペシャルメーターとは別のものです。",
-"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "両方の機器を同じ家庭内ネットワークにつないでください。ゲスト用Wi-Fiやクライアント分離が有効になっていないか確認してください。"
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "両方の機器を同じ家庭内ネットワークにつないでください。ゲスト用Wi-Fiやクライアント分離が有効になっていないか確認してください。",
+"BuckMe shows a limit ${0} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank.": "旧バージョンのSave Garageが家族の貯金用ボックスを銀行の下に入れたため、BuckMeの上限がゲーム本来より${0}高く表示されています。",
+"Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "修正するとそのボックスが銀行から外れ、上限がゲーム本来の値に戻ります。",
+"It also takes those boxes out of the bank, so BuckMe’s limit is the game’s own again.": "あわせてそのボックスも銀行から外れ、BuckMeの上限がゲーム本来の値に戻ります。",
+"Fix the BuckMe limit": "BuckMeの上限を修正",
+"The BuckMe limit will be fixed when you save edits.": "編集を保存すると、BuckMeの上限が修正されます。",
+"Will be fixed.": "修正されます。",
+"Will be fixed. Save edits to apply it.": "修正されます。編集を保存すると反映されます。",
+"Up to ${0}: what the bank’s own money boxes hold at this point in the story. Shops can spend all of it. The limit grows as the story goes on. BuckMe shows a limit ${1} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank. Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "最大${0}：ストーリーの現時点で、銀行専用のマネーボックスに入る額です。その全額をショップで使えます。上限はストーリーの進行とともに増えます。旧バージョンのSave Garageが家族の貯金用ボックスを銀行の下に入れたため、BuckMeの上限がゲーム本来より${1}高く表示されています。修正するとそのボックスが銀行から外れ、上限がゲーム本来の値に戻ります。",
+"BuckMe shows ${0}, but ${1} of it sits in Family Savings boxes that an older version of Save Garage put under the bank, and the game can’t spend it. Moving it puts as much as fits, up to ${2}, in the bank’s own money boxes. It also takes those boxes out of the bank, so BuckMe’s limit is the game’s own again.": "BuckMeでは${0}と表示されますが、そのうち${1}は旧バージョンのSave Garageが銀行の下に入れた家族の貯金用ボックスにあり、ゲーム内では使えません。移動すると、入る分だけ（最大${2}）を銀行専用のマネーボックスに入れます。あわせてそのボックスも銀行から外れ、BuckMeの上限がゲーム本来の値に戻ります。",
+"BuckMe shows a limit ${0} higher than the game gives you, because an older version of Save Garage put Family Savings boxes under the bank. Fixing it takes those boxes out of the bank, so the limit is the game’s own again.": "旧バージョンのSave Garageが家族の貯金用ボックスを銀行の下に入れたため、BuckMeの上限がゲーム本来より${0}高く表示されています。修正するとそのボックスが銀行から外れ、上限がゲーム本来の値に戻ります。"
 }
