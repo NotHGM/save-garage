@@ -1,4 +1,7 @@
 {
+"The PS5 connected, but the IPv6 data connection has not reached TCP port 1005.": "PS5 已连接，但 IPv6 数据连接尚未到达电脑的 TCP 1005 端口。",
+"Use the same home network on both devices. Check for guest Wi-Fi or client isolation.": "电脑和主机接入同一家庭局域网，并检查访客 Wi-Fi 和无线客户端隔离。",
+"On Windows, see app/docs/transfer-network.md for the private-network firewall repair.": "Windows 用户可按 app/docs/transfer-network.md 检查专用网络的防火墙放行规则。",
 "Windows could not list the network adapters. Extract the complete Windows package into a new folder and start the editor there.": "Windows 未能读取网卡列表。请把完整 Windows 安装包解压到新文件夹，从那里启动编辑器。",
 "This transfer needs IPv6 on the local network.": "这次回传需要局域网 IPv6，请检查电脑连接 PS5 的网卡。",
 "Network adapter": "网卡",

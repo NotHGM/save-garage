@@ -416,7 +416,7 @@ def adapter_addresses():
         raise ValueError("could not read Windows network adapters") from exc
 
 
-def local_link_local(sock):
+def local_link_local(sock, retry=0):
     """Pick the IPv6 address on the interface carrying this command connection."""
     local = ipaddress.ip_address(sock.getsockname()[0].split("%")[0])
     local = getattr(local, "ipv4_mapped", None) or local
@@ -428,12 +428,21 @@ def local_link_local(sock):
         adapter = name
         matches = sorted({a for a in ips if a.version == 6 and a.is_link_local}, key=int)
         if matches:
-            return matches[0].packed
+            return matches[retry % len(matches)].packed
         break
     raise LocalIPv6Unavailable(adapter)
 
 
-def serve_command(sock, oracle_host, oracle_port, prepare_ipv6=None):
+def select_link_local(sock, attempts, retry=None):
+    peer = (sock.getsockname()[0], sock.getpeername()[0])
+    if retry is not None:
+        attempts[peer] = retry
+    return local_link_local(sock, attempts.get(peer, 0))
+
+
+def serve_command(sock, oracle_host, oracle_port, prepare_ipv6=None, address_attempts=None):
+    if address_attempts is None:
+        address_attempts = {}
     server_value = os.urandom(16)
     sock.sendall(server_value + bytes(48))
     client_value = recv_exact(sock, 64)[:16]
@@ -465,7 +474,7 @@ def serve_command(sock, oracle_host, oracle_port, prepare_ipv6=None):
             version_b = struct.unpack_from("<I", body, 84)[0]
             extended = wants_extended(body)
             if extended:
-                address = local_link_local(sock)
+                address = select_link_local(sock, address_attempts, sub if cmd == 0x91 else None)
                 if prepare_ipv6 is None:
                     raise ValueError("IPv6 data listener was not configured")
                 prepare_ipv6()
@@ -706,6 +715,7 @@ def main():
     listener.listen(1)
     threading.Thread(target=discovery_server, args=(args.discovery_port, args.ipv6), daemon=True).start()
     print(f"[tcp] source listening on {args.port}; select {HOST_NAME.decode()} on the PS5", flush=True)
+    address_attempts = {}
     while True:
         client, address = listener.accept()
         print(f"[tcp] connection from {address}", flush=True)
@@ -718,7 +728,7 @@ def main():
         with client:
             client.settimeout(310)
             try:
-                serve_command(client, args.oracle_host, args.oracle_port, prepare_ipv6)
+                serve_command(client, args.oracle_host, args.oracle_port, prepare_ipv6, address_attempts)
             except LocalIPv6Unavailable as exc:
                 print("[network] " + json.dumps({"issue": "local_ipv6", "adapter": exc.adapter}), flush=True)
             except (EOFError, OSError, ValueError) as exc:
